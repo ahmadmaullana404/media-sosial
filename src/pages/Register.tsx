@@ -36,17 +36,17 @@ const Register: React.FC = () => {
     };
 
     return (
-        <div className="min-h-screen bg-[#0a0a0c] flex items-center justify-center p-4 md:p-10 font-sans">
+        <div className="min-h-screen bg-slate-900 flex items-center justify-center p-4 md:p-10 font-sans">
             {/* Ambient Background Elements */}
             <div className="fixed inset-0 overflow-hidden pointer-events-none">
-                <div className="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] bg-indigo-600/10 blur-[120px] rounded-full"></div>
-                <div className="absolute -bottom-[10%] -right-[10%] w-[40%] h-[40%] bg-blue-600/10 blur-[120px] rounded-full"></div>
+                <div className="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] bg-indigo-500/10 blur-[120px] rounded-full"></div>
+                <div className="absolute -bottom-[10%] -right-[10%] w-[40%] h-[40%] bg-blue-500/10 blur-[120px] rounded-full"></div>
             </div>
 
             <motion.div 
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 bg-[#12141a] border border-white/5 rounded-[2.5rem] shadow-2xl overflow-hidden relative z-10"
+                className="w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 bg-slate-800 border border-white/5 rounded-[2.5rem] shadow-2xl overflow-hidden relative z-10"
             >
                 {/* Left Side: Branding/Visual */}
                 <div className="hidden md:flex flex-col justify-between p-12 bg-gradient-to-br from-indigo-600 to-blue-700 relative overflow-hidden">
@@ -85,10 +85,10 @@ const Register: React.FC = () => {
                 </div>
 
                 {/* Right Side: Form */}
-                <div className="p-8 md:p-16 flex flex-col justify-center bg-[#12141a]">
+                <div className="p-8 md:p-16 flex flex-col justify-center bg-slate-800">
                     <div className="mb-8 text-center md:text-left">
                         <h1 className="text-3xl font-black text-white tracking-tight leading-none mb-2 font-display">Sign Up</h1>
-                        <p className="text-slate-500 font-medium">Buat akun untuk mulai menjelajah.</p>
+                        <p className="text-slate-400 font-medium">Buat akun untuk mulai menjelajah.</p>
                     </div>
 
                     {error && (
@@ -114,7 +114,7 @@ const Register: React.FC = () => {
                                         name="full_name"
                                         type="text" 
                                         onChange={handleChange}
-                                        className="w-full bg-[#1a1d25] border border-white/5 focus:border-blue-500/50 rounded-2xl py-3.5 pl-11 pr-4 text-white focus:outline-none focus:ring-4 focus:ring-blue-500/10 transition-all placeholder:text-slate-600 sm:text-sm"
+                                        className="w-full bg-slate-900 border border-white/5 focus:border-blue-500/50 rounded-2xl py-3.5 pl-11 pr-4 text-white focus:outline-none focus:ring-4 focus:ring-blue-500/10 transition-all placeholder:text-slate-600 sm:text-sm"
                                         placeholder="Nama Asli"
                                         required
                                     />
@@ -130,7 +130,7 @@ const Register: React.FC = () => {
                                         name="username"
                                         type="text" 
                                         onChange={handleChange}
-                                        className="w-full bg-[#1a1d25] border border-white/5 focus:border-blue-500/50 rounded-2xl py-3.5 pl-11 pr-4 text-white focus:outline-none focus:ring-4 focus:ring-blue-500/10 transition-all placeholder:text-slate-600 sm:text-sm"
+                                        className="w-full bg-slate-900 border border-white/5 focus:border-blue-500/50 rounded-2xl py-3.5 pl-11 pr-4 text-white focus:outline-none focus:ring-4 focus:ring-blue-500/10 transition-all placeholder:text-slate-600 sm:text-sm"
                                         placeholder="user_id"
                                         required
                                     />
@@ -148,7 +148,7 @@ const Register: React.FC = () => {
                                     name="email"
                                     type="email" 
                                     onChange={handleChange}
-                                    className="w-full bg-[#1a1d25] border border-white/5 focus:border-blue-500/50 rounded-2xl py-3.5 pl-11 pr-4 text-white focus:outline-none focus:ring-4 focus:ring-blue-500/10 transition-all placeholder:text-slate-600 sm:text-sm"
+                                    className="w-full bg-slate-900 border border-white/5 focus:border-blue-500/50 rounded-2xl py-3.5 pl-11 pr-4 text-white focus:outline-none focus:ring-4 focus:ring-blue-500/10 transition-all placeholder:text-slate-600 sm:text-sm"
                                     placeholder="mail@example.com"
                                     required
                                 />
@@ -165,7 +165,7 @@ const Register: React.FC = () => {
                                     name="password"
                                     type="password" 
                                     onChange={handleChange}
-                                    className="w-full bg-[#1a1d25] border border-white/5 focus:border-blue-500/50 rounded-2xl py-3.5 pl-11 pr-4 text-white focus:outline-none focus:ring-4 focus:ring-blue-500/10 transition-all placeholder:text-slate-600 sm:text-sm"
+                                    className="w-full bg-slate-900 border border-white/5 focus:border-blue-500/50 rounded-2xl py-3.5 pl-11 pr-4 text-white focus:outline-none focus:ring-4 focus:ring-blue-500/10 transition-all placeholder:text-slate-600 sm:text-sm"
                                     placeholder="••••••••"
                                     required
                                 />

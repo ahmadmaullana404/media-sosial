@@ -71,23 +71,26 @@ mysql -u socialuser -p socialhub_db
 ```
 Jika berhasil masuk, database siap!
 
+## 7. Inisialisasi Database (Cara Cepat)
+Kami sudah menyediakan script otomatis untuk membuat tabel dan database. Pastikan MySQL/MariaDB sudah running.
+
+```bash
+# 1. Jalankan inisialisasi tabel (Membuat database & tabel)
+npm run db:init
+
+# 2. Jalankan pengisian data demo (Opsional, agar ada postingan awal)
+npm run db:seed
+```
+
 ## 8. Menjalankan Aplikasi
 Setelah database siap, Anda bisa menjalankan aplikasi:
 
 ```bash
-# 1. Install dependensi
-npm install
-
-# 2. Jalankan migrasi database
-npx tsx scripts/seed.ts
-
-# 3. Jalankan server development
+# 1. Jalankan server development
 npm run dev
 ```
 
-**Troubleshooting `ERR_MODULE_NOT_FOUND`:**
-Jika Anda mendapati error `server.ts` tidak ditemukan padahal file ada di folder, pastikan Anda berada di direktori project yang benar (`~/project/sosialmedia`) dan coba jalankan:
-```bash
-npx tsx ./server.ts
-```
-Atau jika masih bermasalah, pastikan file `package.json` Anda memiliki `"type": "module"`.
+**Troubleshooting:**
+1. **`ERR_MODULE_NOT_FOUND`:** Pastikan Anda berada di direktori project yang benar (`~/project/sosialmedia`). Jika server.ts tidak ditemukan, pastikan file tersebut ada di folder utama (root).
+2. **Server Error Saat Login:** Biasanya disebabkan database belum siap. Jalankan `npm run db:init` dan `npm run db:seed` untuk memastikan semua tabel ada.
+3. **Koneksi Database Gagal:** Periksa file `.env`. Pastikan `DB_USER` dan `DB_PASSWORD` sesuai dengan akun yang Anda buat di langkah 3.

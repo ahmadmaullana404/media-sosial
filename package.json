@@ -9,7 +9,9 @@
     "start": "node dist/server.cjs",
     "clean": "rm -rf dist",
     "lint": "tsc --noEmit",
-    "sync": "bash sync.sh"
+    "sync": "bash sync.sh",
+    "db:init": "npx tsx scripts/init-db.ts",
+    "db:seed": "npx tsx scripts/seed.ts"
   },
   "dependencies": {
     "@google/genai": "^1.29.0",

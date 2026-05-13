@@ -239,14 +239,6 @@ const Feed: React.FC = () => {
                         ))}
                     </div>
                 </div>
-
-                <div className="px-6 opacity-30">
-                    <p className="text-[9px] text-slate-500 uppercase tracking-widest leading-loose">
-                        Tentang &bull; Bantuan &bull; Privasi &bull; Ketentuan &bull; Bahasa
-                        <br />
-                        SocialHub &copy; 2026 AI-Build
-                    </p>
-                </div>
             </aside>
         </div>
     );

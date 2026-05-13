@@ -80,7 +80,8 @@ router.post('/login', async (req: Request, res: Response) => {
             return res.status(400).json({ success: false, message: 'Username atau Password salah.' });
         }
 
-        if (user.is_banned) {
+        // Cek status user (is_banned diubah ke status === 'banned' sesuai schema)
+        if (user.status === 'banned') {
             return res.status(403).json({ success: false, message: 'Akun Anda telah diblokir.' });
         }
 

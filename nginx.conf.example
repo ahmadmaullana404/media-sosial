@@ -1,0 +1,42 @@
+server {
+    listen 80;
+    server_name domain-anda.com; # Ganti dengan domain atau IP
+
+    # Batasi ukuran upload ke 10MB
+    client_max_body_size 10M;
+
+    # Folder file statis hasil build (Frontend)
+    root /path/to/project/dist;
+    index index.html;
+
+    # Reverse Proxy ke Node.js (Backend)
+    location /api {
+        proxy_pass http://localhost:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+
+    # Reverse Proxy untuk Socket.io
+    location /socket.io {
+        proxy_pass http://localhost:3000/socket.io;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "Upgrade";
+        proxy_set_header Host $host;
+    }
+
+    # Folder upload gambar agar bisa diakses browser
+    location /uploads {
+        alias /path/to/project/uploads;
+        expires 30d;
+        add_header Cache-Control "public, no-transform";
+    }
+
+    # Fallback untuk SPA React
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+}

@@ -35,6 +35,17 @@ const Profile: React.FC = () => {
 
     const isMe = me?.id === user.id;
 
+    const handleFollow = async () => {
+        try {
+            await api.post(`/social/users/${user.id}/follow`);
+            // Refresh profile data to update follower count
+            const res = await api.get(`/users/${id}`);
+            setUser(res.data);
+        } catch (err) {
+            alert('Gagal mengikuti user');
+        }
+    };
+
     return (
         <div className="max-w-4xl mx-auto py-8 px-4">
             {/* Header Profil */}
@@ -64,7 +75,10 @@ const Profile: React.FC = () => {
                                         <Settings size={14} /> Pengaturan
                                     </button>
                                 ) : (
-                                    <button className="bg-blue-600 hover:bg-blue-500 px-8 py-2 rounded-xl text-sm font-bold text-white transition-all shadow-lg shadow-blue-600/20 uppercase tracking-tight">
+                                    <button 
+                                        onClick={handleFollow}
+                                        className="bg-blue-600 hover:bg-blue-500 px-8 py-2 rounded-xl text-sm font-bold text-white transition-all shadow-lg shadow-blue-600/20 uppercase tracking-tight"
+                                    >
                                         Ikuti
                                     </button>
                                 )}

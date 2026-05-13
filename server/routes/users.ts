@@ -48,6 +48,27 @@ router.get('/:id', async (req: AuthRequest, res: Response) => {
 });
 
 /**
+ * GET /api/users/discovery/random
+ * Rekomendasi user untuk diikuti
+ */
+router.get('/discovery/random', verifyToken, async (req: AuthRequest, res: Response) => {
+    try {
+        const [users]: any = await pool.query(`
+            SELECT id, username, full_name, avatar 
+            FROM users 
+            WHERE id != ? 
+            AND id NOT IN (SELECT following_id FROM follows WHERE follower_id = ?)
+            ORDER BY RAND()
+            LIMIT 5
+        `, [req.user?.id, req.user?.id]);
+
+        res.json({ success: true, data: users });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Server error' });
+    }
+});
+
+/**
  * PUT /api/users/:id
  * Update profil (Bio/Nama)
  */

@@ -41,7 +41,8 @@ router.get('/feed', verifyToken, async (req: AuthRequest, res: Response) => {
         // Dulu: hanya orang yang difollow. Sekarang: Global + ditandai jika itu dari user sendiri
         const [posts]: any = await pool.query(`
             SELECT p.*, u.username, u.avatar,
-                   (SELECT COUNT(*) FROM likes WHERE post_id = p.id AND user_id = ?) as isLiked
+                   (SELECT COUNT(*) FROM likes WHERE post_id = p.id AND user_id = ?) as isLiked,
+                   (SELECT COUNT(*) FROM comments WHERE post_id = p.id) as commentCount
             FROM posts p
             JOIN users u ON p.user_id = u.id
             ORDER BY p.created_at DESC
@@ -49,6 +50,42 @@ router.get('/feed', verifyToken, async (req: AuthRequest, res: Response) => {
         `, [req.user?.id]);
 
         res.json({ success: true, data: posts });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Server error' });
+    }
+});
+
+/**
+ * GET /api/posts/:id/comments
+ * Ambil semua komentar untuk satu postingan
+ */
+router.get('/:id/comments', verifyToken, async (req: AuthRequest, res: Response) => {
+    try {
+        const [comments]: any = await pool.query(`
+            SELECT c.*, u.username, u.avatar 
+            FROM comments c 
+            JOIN users u ON c.user_id = u.id 
+            WHERE c.post_id = ? 
+            ORDER BY c.created_at ASC
+        `, [req.params.id]);
+        res.json({ success: true, data: comments });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Server error' });
+    }
+});
+
+/**
+ * POST /api/posts/:id/comments
+ * Tambah komentar
+ */
+router.post('/:id/comments', verifyToken, async (req: AuthRequest, res: Response) => {
+    const { content } = req.body;
+    try {
+        await pool.query(
+            'INSERT INTO comments (user_id, post_id, content) VALUES (?, ?, ?)',
+            [req.user?.id, req.params.id, content]
+        );
+        res.json({ success: true, message: 'Komentar ditambahkan' });
     } catch (error) {
         res.status(500).json({ success: false, message: 'Server error' });
     }

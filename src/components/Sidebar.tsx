@@ -14,8 +14,6 @@ export const Sidebar: React.FC = () => {
     { name: 'Jelajah', path: '/explore', icon: Compass },
     { name: 'Notifikasi', path: '/notifications', icon: Bell },
     { name: 'Pesan', path: '/messages', icon: Mail },
-    { name: 'Buat Post', path: '/', icon: PlusSquare },
-    { name: 'Pesan', path: '/messages', icon: Mail },
     { name: 'Profil', path: `/profile/${user?.id}`, icon: User },
   ];
 
@@ -29,9 +27,9 @@ export const Sidebar: React.FC = () => {
   };
 
   return (
-    <aside className="fixed bottom-0 left-0 w-full bg-[#12141a] border-t border-white/10 p-2 md:relative md:w-64 md:h-screen md:border-t-0 md:border-r md:p-6 flex flex-col z-50">
+    <aside className="fixed bottom-0 left-0 w-full bg-slate-900 border-t border-white/5 p-2 md:relative md:w-64 md:h-screen md:border-t-0 md:border-r md:p-6 flex flex-col z-50">
       <div className="hidden md:flex items-center gap-2 mb-10">
-        <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center font-bold text-white">S</div>
+        <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center font-bold text-white shadow-[0_0_15px_rgba(100,149,237,0.4)]">S</div>
         <h1 className="text-xl font-bold tracking-tighter text-white uppercase font-display">SocialHub</h1>
       </div>
 

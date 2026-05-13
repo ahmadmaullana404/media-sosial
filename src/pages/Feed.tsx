@@ -8,10 +8,13 @@ import { motion, AnimatePresence } from 'motion/react';
 const Feed: React.FC = () => {
     const { user } = useAuth();
     const [posts, setPosts] = useState<any[]>([]);
+    const [discoveryUsers, setDiscoveryUsers] = useState<any[]>([]);
     const [content, setContent] = useState('');
     const [image, setImage] = useState<File | null>(null);
     const [loading, setLoading] = useState(false);
     const [fetching, setFetching] = useState(true);
+    const [commentingOn, setCommentingOn] = useState<number | null>(null);
+    const [commentText, setCommentText] = useState('');
 
     const fetchFeed = async () => {
         try {
@@ -24,8 +27,18 @@ const Feed: React.FC = () => {
         }
     };
 
+    const fetchDiscovery = async () => {
+        try {
+            const res = await api.get('/users/discovery/random');
+            setDiscoveryUsers(res.data);
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
     useEffect(() => {
         fetchFeed();
+        fetchDiscovery();
     }, []);
 
     const handleCreatePost = async (e: React.FormEvent) => {
@@ -41,9 +54,9 @@ const Feed: React.FC = () => {
             await api.post('/posts', formData);
             setContent('');
             setImage(null);
-            fetchFeed(); // Refresh feed
-        } catch (err) {
-            alert('Gagal membuat postingan');
+            fetchFeed();
+        } catch (err: any) {
+            alert(err.message || 'Gagal membuat postingan');
         } finally {
             setLoading(false);
         }
@@ -52,9 +65,35 @@ const Feed: React.FC = () => {
     const handleLike = async (postId: number) => {
         try {
             const res = await api.post(`/social/${postId}/like`);
-            setPosts(posts.map(p => p.id === postId ? { ...p, isLiked: res.liked } : p));
+            setPosts(posts.map(p => p.id === postId ? { 
+                ...p, 
+                isLiked: res.liked,
+                // Simple optimisme UI: update local like count jika ada
+            } : p));
         } catch (err) {
-            console.error(err);
+            alert('Gagal menyukai postingan');
+        }
+    };
+
+    const handleFollow = async (targetId: number) => {
+        try {
+            await api.post(`/social/users/${targetId}/follow`);
+            setDiscoveryUsers(discoveryUsers.filter(u => u.id !== targetId));
+            fetchFeed(); // Update feed for new content
+        } catch (err) {
+            alert('Gagal mengikuti user');
+        }
+    };
+
+    const handleAddComment = async (postId: number) => {
+        if (!commentText.trim()) return;
+        try {
+            await api.post(`/posts/${postId}/comments`, { content: commentText });
+            setCommentText('');
+            setCommentingOn(null);
+            fetchFeed(); // Update comment count
+        } catch (err) {
+            alert('Gagal mengirim komentar');
         }
     };
 
@@ -194,11 +233,38 @@ const Feed: React.FC = () => {
                                         <Heart size={20} fill={post.isLiked ? "currentColor" : "none"} />
                                         <span className="font-mono text-xs">Like</span>
                                     </button>
-                                    <button className="flex items-center gap-2 text-slate-500 hover:text-blue-500 text-sm transition-colors">
+                                    <button 
+                                        onClick={() => setCommentingOn(commentingOn === post.id ? null : post.id)}
+                                        className={cn(
+                                            "flex items-center gap-2 text-sm transition-colors",
+                                            commentingOn === post.id ? "text-blue-500" : "text-slate-500 hover:text-blue-500"
+                                        )}
+                                    >
                                         <MessageCircle size={20} />
-                                        <span className="font-mono text-xs">Komen</span>
+                                        <span className="font-mono text-xs">{post.commentCount || 0} Komen</span>
                                     </button>
                                 </div>
+
+                                {commentingOn === post.id && (
+                                    <div className="p-4 bg-black/10 border-t border-white/5">
+                                        <div className="flex gap-3">
+                                            <input 
+                                                type="text"
+                                                value={commentText}
+                                                onChange={(e) => setCommentText(e.target.value)}
+                                                placeholder="Tulis komentar..."
+                                                className="flex-1 bg-slate-900/50 border border-white/10 rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none focus:border-blue-500/50"
+                                                onKeyDown={(e) => e.key === 'Enter' && handleAddComment(post.id)}
+                                            />
+                                            <button 
+                                                onClick={() => handleAddComment(post.id)}
+                                                className="bg-blue-600 hover:bg-blue-500 px-3 py-1.5 rounded-lg text-xs font-bold text-white transition-colors"
+                                            >
+                                                Kirim
+                                            </button>
+                                        </div>
+                                    </div>
+                                )}
                             </motion.article>
                         ))}
                     </AnimatePresence>
@@ -213,16 +279,25 @@ const Feed: React.FC = () => {
                         <Compass size={16} className="text-blue-500" /> Jelajahi User
                     </h3>
                     <div className="space-y-4">
-                        {[1, 2, 3].map((i) => (
-                            <div key={i} className="flex items-center justify-between group">
+                        {discoveryUsers.length === 0 ? (
+                            <p className="text-xs text-slate-500 text-center py-4">Tidak ada rekomendasi</p>
+                        ) : discoveryUsers.map((u) => (
+                            <div key={u.id} className="flex items-center justify-between group">
                                 <div className="flex items-center gap-3">
-                                    <div className="w-10 h-10 bg-slate-800 rounded-xl"></div>
+                                    <div className="w-10 h-10 bg-slate-700 rounded-xl overflow-hidden">
+                                        {u.avatar && <img src={u.avatar} alt={u.username} className="w-full h-full object-cover" />}
+                                    </div>
                                     <div>
-                                        <div className="h-3 w-20 bg-slate-800 rounded mb-1"></div>
-                                        <div className="h-2 w-12 bg-slate-800/50 rounded"></div>
+                                        <p className="text-xs font-bold text-white leading-none">{u.username}</p>
+                                        <p className="text-[10px] text-slate-500">Suggested</p>
                                     </div>
                                 </div>
-                                <button className="text-[10px] font-black text-blue-500 hover:text-white uppercase tracking-tight transition-colors">Ikuti</button>
+                                <button 
+                                    onClick={() => handleFollow(u.id)}
+                                    className="text-[10px] font-black text-blue-500 hover:text-white uppercase tracking-tight transition-colors"
+                                >
+                                    Ikuti
+                                </button>
                             </div>
                         ))}
                     </div>

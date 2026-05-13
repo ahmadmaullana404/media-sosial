@@ -27,8 +27,8 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode; adminOnly?: boolean 
   const { user, loading } = useAuth();
 
   if (loading) return (
-    <div className="min-h-screen bg-[#0a0a0c] flex items-center justify-center">
-      <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+    <div className="min-h-screen bg-slate-950 flex items-center justify-center">
+      <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
     </div>
   );
 
@@ -36,7 +36,7 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode; adminOnly?: boolean 
   if (adminOnly && user.role !== 'admin') return <Navigate to="/" />;
 
   return (
-    <div className="flex bg-[#0a0a0c] min-h-screen text-[#d1d1d1]">
+    <div className="flex bg-slate-900 min-h-screen text-slate-100">
       {!adminOnly && <Sidebar />}
       <main className="flex-1 overflow-y-auto">
         {children}

@@ -49,7 +49,7 @@ const Register: React.FC = () => {
                 className="w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 bg-slate-800 border border-white/5 rounded-[2.5rem] shadow-2xl overflow-hidden relative z-10"
             >
                 {/* Left Side: Branding/Visual */}
-                <div className="hidden md:flex flex-col justify-between p-12 bg-gradient-to-br from-indigo-600 to-blue-700 relative overflow-hidden">
+                <div className="hidden md:flex flex-col justify-between p-12 bg-gradient-to-br from-blue-600 to-indigo-700 relative overflow-hidden">
                     <div className="absolute top-0 right-0 p-10 opacity-10">
                         <UserPlus size={200} className="-rotate-12" />
                     </div>
